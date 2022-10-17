@@ -83,7 +83,12 @@ let routes = [
             {
                 path: 'checktime',
                 component: () => import("../views/manage/checktime.vue")
+            },
+            {
+                path: 'project',
+                component: () => import("../views/manage/keyan_project.vue")
             }
+
 
         ]
     }
