@@ -13,6 +13,15 @@
       <el-table-column prop="projectName" label="项目名称"></el-table-column>
       <el-table-column prop="projectType" label="项目类型"></el-table-column>
       <el-table-column prop="projectLeader" label="项目牵头人"></el-table-column>
+      <el-table-column prop="projectJoin" label="项目参与人"></el-table-column>
+      <el-table-column prop="projectGrade" label="项目等级"></el-table-column>
+      <el-table-column prop="concludeTime" label="结题时间"></el-table-column>
+      <el-table-column prop="projectId" label="项目编号"></el-table-column>
+      <el-table-column prop="startTime" label="开始时间"></el-table-column>
+      <el-table-column prop="endTime" label="结束时间"></el-table-column>
+      <el-table-column prop="fundingDirect" label="直接经费"></el-table-column>
+      <el-table-column prop="fundingIndirect" label="间接经费"></el-table-column>
+      <el-table-column prop="projectEnter" label="录入人"></el-table-column>
 <!--    如果项目类型项做选择框，可以用这一段  <el-table-column-->
 <!--          label="项目">-->
 <!--        <template slot-scope="scope">-->
@@ -70,6 +79,34 @@
         <el-form-item label="项目牵头人" label-width="120px">
           <el-input v-model="entity.projectLeader" autocomplete="off" style="width: 80%"></el-input>
         </el-form-item>
+        <el-form-item label="项目参与人" label-width="120px">
+          <el-input v-model="entity.projectJoin" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="项目等级" label-width="120px">
+          <el-input v-model="entity.projectGrade" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="结题时间" label-width="120px">
+          <el-input v-model="entity.concludeTime" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="项目编号" label-width="120px">
+          <el-input v-model="entity.projectId" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="开始时间" label-width="120px">
+          <el-input v-model="entity.startTime" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="结束时间" label-width="120px">
+          <el-input v-model="entity.endTime" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="直接经费" label-width="120px">
+          <el-input v-model="entity.fundingDirect" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="间接经费" label-width="120px">
+          <el-input v-model="entity.fundingIndirect" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+        <el-form-item label="录入人" label-width="120px">
+          <el-input v-model="entity.projectEnter" autocomplete="off" style="width: 80%"></el-input>
+        </el-form-item>
+
 
 <!--        <el-form-item label="ID" label-width="120px" >-->
 <!--          <el-input v-model="entity.id" autocomplete="off" style="width: 80%"></el-input>-->
