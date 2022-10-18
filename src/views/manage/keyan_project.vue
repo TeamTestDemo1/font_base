@@ -108,9 +108,6 @@
         </el-form-item>
 
 
-<!--        <el-form-item label="ID" label-width="120px" >-->
-<!--          <el-input v-model="entity.id" autocomplete="off" style="width: 80%"></el-input>-->
-<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
