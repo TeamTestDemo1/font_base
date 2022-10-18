@@ -87,6 +87,14 @@ let routes = [
             {
                 path: 'project',
                 component: () => import("../views/manage/keyan_project.vue")
+            },
+            {
+                path: 'checkpaper',
+                component: () => import("../views/manage/Checkpaper")
+            },
+            {
+                path: 'submitpaper',
+                component: () => import("../views/manage/Submitpaper")
             }
 
 
