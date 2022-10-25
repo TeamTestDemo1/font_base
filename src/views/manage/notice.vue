@@ -10,7 +10,6 @@
       <el-table-column prop="title" label="标题"> </el-table-column>
       <el-table-column prop="content" label="内容"> </el-table-column>
       <el-table-column prop="time" label="发布时间"> </el-table-column>
-
       <el-table-column label="操作">
         <template #default="scope">
           <el-button size="small" @click="edit(scope.row)" style="background-color: #ffd04b">详情</el-button>

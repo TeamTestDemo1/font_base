@@ -8,12 +8,10 @@
     </div>
     <el-table :data="tableData" border stripe style="width: 100%">
       <el-table-column prop="id" label="ID"></el-table-column>
-      <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="nickName" label="昵称"></el-table-column>
+      <el-table-column prop="username" label="用户名（账号）"></el-table-column>
+      <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="uid" label="学号"></el-table-column>
       <el-table-column prop="phone" label="电话"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
-      <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column
           label="角色">
         <template slot-scope="scope">
@@ -108,7 +106,7 @@ export default {
     };
   },
   created() {
-    // this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {}
+     this.user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {}
     this.load()
   },
   methods: {

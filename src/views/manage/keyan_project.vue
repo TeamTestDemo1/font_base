@@ -1,12 +1,15 @@
 <template>
 
   <div>
-    #  这是科研页面,超级管理员可查看
     <div style="padding: 5px 0">
       <el-input v-model="text" @keyup.enter.native="load" style="width: 200px"> <i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+<!--      <el-button @click="successUpload" size="small" style="margin-left: 10px ;background-color: #ffd04b">导入</el-button>-->
+      <el-upload action="http://localhost:9999/api/project/import" :on-success="successUpload" :show-file-list="false" style="display: inline-block">
+        <el-button  type="warning"  style="margin-left: 10px"><i class="el-icon-upload2"/>导 入</el-button>
+      </el-upload>
+      <el-button type="warning"  @click="download" style="margin-left: 50px;margin-top: 50px"><i class="el-icon-download"/> 导 出</el-button>
       <el-button @click="add" size="small" style="margin-left: 10px ;background-color: #ffd04b">新增</el-button>
-      <el-button @click="add" size="small" style="margin-left: 10px ;background-color: #ffd04b">导入（方法没写）</el-button>
-      <el-button @click="add" size="small" style="margin-left: 10px ;background-color: #ffd04b">导出（方法没写）</el-button>
+      <el-button type="warning"  @click="calculationAll" style="margin-left: 50px;margin-top: 50px"><i class="el-icon-download"/> 一键核算分数</el-button>
     </div>
     <el-table :data="tableData" border stripe style="width: 100%">
       <el-table-column prop="id" label="ID"></el-table-column>
@@ -22,6 +25,7 @@
       <el-table-column prop="fundingDirect" label="直接经费"></el-table-column>
       <el-table-column prop="fundingIndirect" label="间接经费"></el-table-column>
       <el-table-column prop="projectEnter" label="录入人"></el-table-column>
+      <el-table-column prop="projectScore" label="项目分数"></el-table-column>
 <!--    如果项目类型项做选择框，可以用这一段  <el-table-column-->
 <!--          label="项目">-->
 <!--        <template slot-scope="scope">-->
@@ -68,6 +72,9 @@
     <el-dialog title="项目信息" :visible.sync="dialogFormVisible" width="30%"
                :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
       <el-form :model="entity">
+<!--        <el-form-item label="id" label-width="120px">-->
+<!--          <el-input v-model="entity.id" autocomplete="off" style="width: 80%"></el-input>-->
+<!--        </el-form-item>-->
         <el-form-item label="项目名称" label-width="120px" >
           <el-input v-model="entity.projectName" autocomplete="off" style="width: 80%"></el-input>
         </el-form-item>
@@ -134,11 +141,18 @@ export default {
       pageSize: 10,
       total: 0,
       entity: {},
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      username:"",
     };
   },
   created() {
-     this.project = sessionStorage.getItem("project") ? JSON.parse(sessionStorage.getItem("project")) : {}
+     this.project = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : {}
+    if(this.project.name==='admin'){
+      this.username=""
+    }
+    else{
+      this.username=this.project.name
+    }
     this.load()
   },
   methods: {
@@ -156,7 +170,9 @@ export default {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          name: this.text
+          name: this.text,
+          leaderName:this.username
+          // leaderName:this.user.username 用于教师查看
         }
       }).then(res => {
         this.tableData = res.data.records || []
@@ -221,8 +237,25 @@ export default {
         }
         this.load()
       })
+    },
+
+
+    successUpload(){
+      this.$message.success("导入成功")
+      this.load()
+    },
+    download() {
+      window.open("http://localhost:9999/api/project/download")
+    },
+    //action="http://localhost:9999/project/import"
+    calculationAll(){
+      API.post("http://localhost:9999/api/project/all",this.tableData).then(res=>{
+        this.$message.success("一键核算成功")
+        this.load()
+      })
     }
   },
+
 };
 </script>
 
