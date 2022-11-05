@@ -55,6 +55,20 @@ let routes = [
         name: 'Register',
         component: () => import("../views/register")
     },
+    // {
+    //     path:'/charts',
+    //     component: charts,
+    //     children: [
+    //         // {
+    //         //     path:'searchchart',
+    //         //     component: () => import("../charts/searchchart.vue")
+    //         // },
+    //         {
+    //             path: 'shixi',
+    //             component: () => import("../views/manage/teach_shixi.vue")
+    //         }
+    //     ]
+    // },
     {
         path:'/manage',
         component: manage,
@@ -95,6 +109,22 @@ let routes = [
             {
                 path: 'submitpaper',
                 component: () => import("../views/manage/Submitpaper")
+            },
+            {
+                path: 'statistics',
+                component: () => import("../views/manage/Statistics")
+            },
+            {
+                path: 'searchcard',
+                component: () => import("../views/manage/searchcard")
+            },
+            {
+                path: 'teachingcard',
+                component: () => import("../views/manage/teachingcard")
+            },
+            {
+                path: 'teacherhome',
+                component: () => import("../views/manage/teacherhome")
             }
 
 
