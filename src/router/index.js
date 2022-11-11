@@ -103,6 +103,14 @@ let routes = [
                 component: () => import("../views/manage/keyan_project.vue")
             },
             {
+                path: 'writting',
+                component: () => import("../views/manage/writting.vue")
+            },
+            {
+                path: 'award',
+                component: () => import("../views/manage/award.vue")
+            },
+            {
                 path: 'checkpaper',
                 component: () => import("../views/manage/Checkpaper")
             },
