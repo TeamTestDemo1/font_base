@@ -1,9 +1,10 @@
 <template>
   <div class="app-container">
     <header>
-      商学院绩效考核系统
+      <img src="./imagelala.jpg" style="margin-left: -20px; margin-bottom:-25px;width: 68px">
+      |商学院绩效考核系统
       <el-dropdown style="float: right;" @command="handleCommand">
-        <span class="el-dropdown-link" style="cursor: pointer">
+        <span class="el-dropdown-link" style="cursor: pointer;color: white;font-family: '微软雅黑'">
           欢迎你！{{ user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -64,7 +65,8 @@ export default {
   data() {
     return {
       user: {},
-      permissions: []
+      permissions: [],
+      // logo:require("../layout/imagelala.jpg")
     };
   },
   created() {
@@ -105,14 +107,15 @@ export default {
 
 header {
   margin-bottom: 3px;
-  line-height: 50px;
+  line-height: 65px;
   padding: 0 16px;
-  font-size: 18px;
+  font-size: 24px;
+  font-family: 楷体;
   font-weight: bold;
-  background-color: #ffd04b;
-  box-shadow: 0 0 4px 4px #545c64;
+  color: white;
+  background-color: #0554a7;
+  box-shadow: 0 0 4px 4px #eef5fc;
 }
-
 .main-content {
   flex: 1;
   display: flex;

@@ -3,7 +3,11 @@ import VueRouter from 'vue-router'
 import manage from "@/layout/manage";
 import home from "@/views/manage/home";
 import lilun from "@/views/manage/teach_lilun";
-
+import computerPractice from "@/components/course/computerPractice";
+import internShip from "@/components/course/internShip";
+import practice from "@/components/course/practice";
+import tclass from "@/components/course/tclass";
+import zhiDao from "@/components/course/zhiDao";
 Vue.use(VueRouter)
 
 const VueRouterPush = VueRouter.prototype.push
@@ -55,20 +59,6 @@ let routes = [
         name: 'Register',
         component: () => import("../views/register")
     },
-    // {
-    //     path:'/charts',
-    //     component: charts,
-    //     children: [
-    //         // {
-    //         //     path:'searchchart',
-    //         //     component: () => import("../charts/searchchart.vue")
-    //         // },
-    //         {
-    //             path: 'shixi',
-    //             component: () => import("../views/manage/teach_shixi.vue")
-    //         }
-    //     ]
-    // },
     {
         path:'/manage',
         component: manage,
@@ -76,63 +66,74 @@ let routes = [
         children: [
             {
                 path:'home',
-                component:home
+                component:home,
+                children:[
+                    {
+                        path: 'mixcharts',
+                        component: () => import("../components/charts/mixcharts.vue"),
+
+                    },
+                ]
             },
             {
                 path:'lilun',
                 component: () => import("../views/manage/teach_lilun.vue")
             },
             {
-                path: 'shixi',
-                component: () => import("../views/manage/teach_shixi.vue")
-            },
-            {
-                path: 'shangji',
-                component: () => import("../views/manage/teach_shangji.vue")
-            },
-            {
-                path: 'shangji',
-                component: () => import("../views/manage/teach_withStudent.vue")
-            },
-            {
-                path: 'checktime',
-                component: () => import("../views/manage/checktime.vue")
+                path: 'writting',
+                component: () => import("../views/manage/writting.vue")
             },
             {
                 path: 'project',
                 component: () => import("../views/manage/keyan_project.vue")
             },
             {
-                path: 'writting',
-                component: () => import("../views/manage/writting.vue")
-            },
-            {
                 path: 'award',
                 component: () => import("../views/manage/award.vue")
             },
             {
-                path: 'checkpaper',
-                component: () => import("../views/manage/Checkpaper")
+                path: 'super',
+                component: () => import("../views/manage/super")
             },
             {
-                path: 'submitpaper',
-                component: () => import("../views/manage/Submitpaper")
+                 path: 'paper',
+                 component: () => import("../views/manage/Paper"),
+                children:[
+                    {
+                        path: 'chinese',
+                        component: () => import("../components/paper/chinese"),
+                    },
+                    {
+                        path: 'english',
+                        component: () => import("../components/paper/english"),
+                    },
+                ]
             },
             {
-                path: 'statistics',
-                component: () => import("../views/manage/Statistics")
-            },
-            {
-                path: 'searchcard',
-                component: () => import("../views/manage/searchcard")
-            },
-            {
-                path: 'teachingcard',
-                component: () => import("../views/manage/teachingcard")
-            },
-            {
-                path: 'teacherhome',
-                component: () => import("../views/manage/teacherhome")
+                path: 'lilun',
+                component:()=> import("../views/manage/teach_lilun"),
+                children:[
+                    {
+                        path: 'computerPractice',
+                        component:()=> import("../components/course/computerPractice"),
+                    },
+                    {
+                        path: 'internShip',
+                        component:()=> import("../components/course/internShip"),
+                    },
+                    {
+                        path: 'practice',
+                        component:()=> import("../components/course/practice"),
+                    },
+                    {
+                        path: 'tclass',
+                        component:()=> import("../components/course/tclass"),
+                    },
+                    {
+                        path: 'zhiDao',
+                        component:()=> import("../components/course/zhiDao"),
+                    },
+                ]
             }
 
 

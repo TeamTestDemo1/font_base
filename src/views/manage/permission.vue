@@ -4,7 +4,7 @@
     #  这是生成节点自动化开发的菜单页面 超级管理员可查看
     <div style="padding: 5px 0">
 <!--      <el-input v-model="text" @keyup.enter.native="load" style="width: 200px"> <i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>-->
-      <el-button @click="add" round size="small" style="margin-left: 20px ;background-color: #ffd04b">新增节点</el-button>
+      <el-button @click="add" round size="small" type="primary" style="margin-left: 20px ">新增节点</el-button>
     </div>
     <div>
       <el-tree

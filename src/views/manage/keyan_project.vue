@@ -1,16 +1,25 @@
 <template>
   <div style="background: #ededed">
-  <el-card style="margin-bottom: 10px">
-    <div style="margin-top: 10px">
-      <el-input v-model="text" @keyup.enter.native="load" style="width: 200px"> <i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      <el-button @click="add" size="small" type="primary" style="margin-left: 10px ;">新增</el-button>
-      <el-button v-show="project.name === 'admin'" type="primary"  @click="calculationAll" style="margin-left: 10px"><i class="el-icon-download"/> 一键核算分数</el-button>
-      <el-upload action="http://localhost:9999/api/project/import" :on-success="successUpload" :show-file-list="false" style="display: inline-block">
-        <el-button  type="warning" style="margin-left: 690px" ><i class="el-icon-upload2"/>导入</el-button>
-      </el-upload>
-      <el-button type="warning"  @click="download" style="margin-left: 15px;margin-top: 10px"><i class="el-icon-download"/> 导出</el-button>
-    </div>
-  </el-card>
+    <el-card>
+      <div style="margin-top: 10px">
+        <el-col :span="12">
+          <div>
+            <el-input v-model="text" @keyup.enter.native="load" placeholder="请输入搜索内容" style="width: 200px"> <i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+            <el-button @click="add" size="small" type="primary" style="margin-left: 10px ">新增</el-button>
+            <el-button v-show="project.role[0] === 1" type="primary"  @click="calculationAll" style="margin-left: 10px"><i class="el-icon-download"/> 一键核算分数</el-button>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div style="margin-bottom: 20px">
+            <el-button type="warning"  @click="download" style="margin-left: 435px;margin-right: 0px"><i class="el-icon-download"/> 导出</el-button>
+            <el-upload v-show="project.role[0] === 1" action="http://localhost:9999/project/import" :on-success="successUpload" :show-file-list="false" style="display: inline-block">
+              <el-button  type="warning"  style="margin-left: 10px;margin-right: 0px"><i class="el-icon-upload2"/>导入</el-button>
+            </el-upload>
+
+          </div>
+        </el-col>
+      </div>
+    </el-card>
     <el-card style="margin-top: 10px">
       <div style="margin-top: 10px">
     <el-table
@@ -18,8 +27,7 @@
         ref="multipleTable"
         border
         :stripe="true"
-        style="width: 100%"
-        @selection-change="handleSelectionChange">
+        style="width: 100%">
       <el-table-column type="selection"></el-table-column>
       <el-table-column prop="id" label="ID"></el-table-column>
       <el-table-column prop="projectName" label="项目名称"></el-table-column>
@@ -35,6 +43,7 @@
       <el-table-column prop="fundingIndirect" label="间接经费"></el-table-column>
       <el-table-column prop="projectEnter" label="录入人"></el-table-column>
       <el-table-column prop="projectScore" label="项目分数"></el-table-column>
+      <el-table-column prop="state" label="状态"></el-table-column>
       <!--    如果项目类型项做选择框，可以用这一段  <el-table-column-->
       <!--          label="项目">-->
       <!--        <template slot-scope="scope">-->
@@ -48,23 +57,63 @@
       <!--          </el-select>-->
       <!--        </template>-->
       <!--      </el-table-column>-->
-      <el-table-column
-          fixed="right"
-          label="操作"
-          width="180">
+      <el-table-column fixed="right" align="center" label="操作" width="200px">
         <template slot-scope="scope">
-          <el-button v-show="project.role[0] === 3" type="primary" icon="el-icon-edit" round @click="edit(scope.row)">编辑</el-button>
-          <el-popconfirm
-              @confirm="del(scope.row.id)"
-              title="确定删除？">
-            <el-button  v-show="project.role[0] === 3" type="danger" icon="el-icon-delete" round slot="reference"
-                       style="margin-left: 10px">删除</el-button>
-          </el-popconfirm>
-
-          <el-button v-show="project.role[0] === 1" type="success" icon="el-icon-check" round >通过</el-button>
-          <el-button v-show="project.role[0] === 1" type="danger" icon="el-icon-close" round >拒绝</el-button>
+          <el-upload v-show="project.role[0] === 3" action="http://localhost:9999/files/upload" :on-success="successUploadFiles" :show-file-list="false" style="display: inline-block">
+            <el-button  type="primary"  plain style="margin-left: 10px;margin-right: 0px">上传<i class="el-icon-upload el-icon--right"></i></el-button>
+          </el-upload>
+          <el-button
+              v-if="project.role[0] === 1"
+              type="primary"
+              size="mini"
+              plain
+              style="margin-left: 20px"
+              :disabled="scope.row.chkState === 1 || scope.row.chkState === 2"
+              @click="hChkState(scope.row)">审核</el-button>
+          <el-button  v-if="project.role[0] === 3" plain type="success" style="margin-left: 10px"   @click="editstate(scope.row)">需求<i class="el-icon-edit"></i></el-button>
+          <el-button  v-if="project.role[0] === 1" plain type="success" size="mini" @click="edit(scope.row)">编辑</el-button>
+          <div style="margin-top: 8px;margin-left: 10px">
+            <el-button
+                v-if="project.role[0] === 1"
+                size="mini"
+                plain
+                type="warning"
+                style="margin-left: 10px"
+                :disabled="project.role[0] === 1 || scope.row.bounce !== 0"
+                @click="count(scope.row)">核算</el-button>
+            <el-popconfirm
+                title="这是一段内容确定删除吗？"
+                @confirm="del(scope.row)">
+              <el-button
+                  v-if="project.role[0] === 1"
+                  size="mini"
+                  plain
+                  type="danger"
+                  slot="reference"
+                  :disabled="project.role[0] !== 1"
+                  style="margin-left: 10px"
+              >删除</el-button>
+            </el-popconfirm>
+          </div>
         </template>
       </el-table-column>
+<!--      另一种形式的按钮-->
+<!--      <el-table-column-->
+<!--          fixed="right"-->
+<!--          label="操作"-->
+<!--          width="180">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-button v-show="project.role[0] === 3" type="primary" icon="el-icon-edit" round @click="edit(scope.row)">编辑</el-button>-->
+<!--          <el-popconfirm-->
+<!--              @confirm="del(scope.row.id)"-->
+<!--              title="确定删除？">-->
+<!--            <el-button  v-show="project.role[0] === 3" type="danger" icon="el-icon-delete" round slot="reference"-->
+<!--                       style="margin-left: 10px">删除</el-button>-->
+<!--          </el-popconfirm>-->
+<!--          <el-button v-show="project.role[0] === 1" type="success" icon="el-icon-check" round >通过</el-button>-->
+<!--          <el-button v-show="project.role[0] === 1" type="danger" icon="el-icon-close" round >拒绝</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
       </div>
     </el-card>
@@ -76,8 +125,7 @@
           :page-size="pageSize"
           :page-sizes="[2, 5, 10]"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-      >
+          :total="total">
       </el-pagination>
     </div>
 
@@ -146,6 +194,48 @@
         <el-button type="primary" @click="save">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="审核" :visible.sync="showChkStateDialog">
+      <el-form>
+        <el-form-item>
+          <el-radio-group v-model="ratios">
+            <el-radio label="通过" @change="changeState">通过</el-radio>
+            <el-radio label="拒绝" @change="changeState">拒绝</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+              type="textarea"
+              v-model="remark"
+              :rows="5"
+              style="width:400px"
+              placeholder="请输入审核意见"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="showChkStateDialog = false">取消</el-button>
+          <el-button type="primary" @click="hSubmitChkState">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog title="需求" :visible.sync="showeditStateDialog">
+      <el-form>
+        <el-form-item>
+          <el-input
+              type="textarea"
+              v-model="remark"
+              style="width:400px"
+              placeholder="请输入需求"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="showeditStateDialog = false">取消</el-button>
+          <el-button type="primary" @click="SubmitEditState">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -168,6 +258,12 @@ export default {
       entity: {},
       dialogFormVisible: false,
       username:"",
+      showChkStateDialog:false,
+      remark:"",
+      showeditStateDialog:false,
+      ratios:'',
+      state1:'',
+      count:0,
     };
   },
   created() {
@@ -280,6 +376,48 @@ export default {
         this.$message.success("一键核算成功")
         this.load()
       })
+    },
+    chkState(data) {
+      if (data === 0) {
+        return '待审核'
+      } else if (data === 1) {
+        return '已审核'
+      } else {
+        return '已拒绝'
+      }
+      console.log(data)
+    },
+    hChkState(row) {
+      this.showChkStateDialog = true
+      this.class = row
+    },
+    changeState(e){
+      this.state1 = e
+    },
+    hSubmitChkState(){
+      console.log(this.class)
+      if(this.state1 === '通过'){
+        this.class.state = "审核通过"
+      }else if(this.state1 === '拒绝'){
+        this.class.state = this.remark
+      }
+      this.request.post("http://localhost:9999/project",this.class).then(res=>{
+        console.log(res)
+      })
+      this.getData()
+      this.showChkStateDialog = false
+    },
+    editstate(row){
+      this.showeditStateDialog = true
+      this. class = row
+    },
+    SubmitEditState(){
+      this.class.state = this.remark
+      this.request.post("http://localhost:9999/project",this.class).then(res=>{
+        console.log(res)
+      })
+      this.getData()
+      this.showeditStateDialog = false
     }
   },
 

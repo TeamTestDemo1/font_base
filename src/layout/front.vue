@@ -61,7 +61,7 @@
       </el-col>
     </el-row>
 
-    <div style="height: 60px; width: 100%; background-color:#ffd04b; padding: 10px 0; position: fixed; bottom: 0">
+    <div style="height: 60px; width: 100%; background-color:#2f65ef; padding: 10px 0; position: fixed; bottom: 0">
       <div style="text-align: center">
         Copyright © 2022 中南大学绩效考核
       </div>

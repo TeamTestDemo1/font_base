@@ -1,23 +1,22 @@
 <template>
 
   <div>
-    #  这是首页公示区
     <div style="padding: 5px 0">
-      <el-button @click="add"  size="mini" style="margin: 10px 0;background-color: #ffd04b">新增</el-button>
+      <el-button @click="add"  size="mini" type="primary" style="margin: 10px 0;">新增</el-button>
     </div>
-    <el-table :data="tableData" border stripe style="width: 100%">
-      <el-table-column prop="id" label="ID" width="100"> </el-table-column>
-      <el-table-column prop="title" label="标题"> </el-table-column>
-      <el-table-column prop="content" label="内容"> </el-table-column>
-      <el-table-column prop="time" label="发布时间"> </el-table-column>
+    <el-table :data="tableData" border stripe style="width: 100%" >
+      <el-table-column  prop="id" label="ID" width="100"> </el-table-column>
+      <el-table-column  prop="title" label="标题"> </el-table-column>
+      <el-table-column  prop="content" label="内容"> </el-table-column>
+      <el-table-column  prop="time" label="发布时间"> </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center" width="220px">
         <template #default="scope">
-          <el-button size="small" @click="edit(scope.row)" style="background-color: #ffd04b">详情</el-button>
-          <el-button size="small" @click="edit(scope.row)" style="background-color: #ffd04b">编辑</el-button>
+          <el-button size="small" plain @click="edit(scope.row)" type="success">详情</el-button>
+          <el-button size="small" plain type="primary" @click="edit(scope.row)" >编辑</el-button>
           <el-popconfirm title="确定删除吗？" @confirm="del(scope.row.id)">
             <template #reference>
-              <el-button size="small" type="danger"  style="margin-left:10px">删除</el-button>
+              <el-button size="small" type="danger" plain style="margin-left:10px">删除</el-button>
             </template>
           </el-popconfirm>
         </template>

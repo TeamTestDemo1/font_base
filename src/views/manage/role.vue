@@ -6,7 +6,7 @@
       <el-input v-model="text" @keyup.enter.native="load" style="width: 200px"><i slot="prefix"
                                                                                   class="el-input__icon el-icon-search"></i>
       </el-input>
-      <el-button @click="add" size="small" style="margin-left: 10px ;background-color: #ffd04b">新增</el-button>
+      <el-button @click="add" size="small" type="primary" style="margin-left: 10px ;">新增</el-button>
     </div>
     <el-table
         :data="tableData"
@@ -18,14 +18,14 @@
       <el-table-column
           fixed="right"
           label="操作"
-          width="150">
+          align="center"
+          width="260px">
         <template slot-scope="scope">
-          <el-button style="background-color: #ffd04b ;margin-top: 3px;margin-inside: 5px"  round @click="handlePermission(scope.row)"  size='small'>  权限设置  </el-button>
-          <el-button style="background-color: #ffd04b ;margin-top: 3px ;margin-left: 1px"  round @click="edit(scope.row)"  size='mini'>编辑</el-button>
-          <br>
+          <el-button style="margin-top: 3px;margin-inside: 5px"  round plain type="primary" @click="handlePermission(scope.row)"  size='small'>  权限设置  </el-button>
+          <el-button style="margin-top: 3px ;margin-left: 10px"  round plain type="success" @click="edit(scope.row)"  size='mini'>编辑</el-button>
           <el-popconfirm
               @confirm="del(scope.row.id)"
-              title="确定删除？"><el-button  style="background-color: #ffd04b ;margin-top: 3px;margin-left: 1px" round size='mini'  slot="reference">删除</el-button>
+              title="确定删除？"><el-button  plain type="danger" style="margin-top: 3px;margin-left: 10px" round size='mini'  slot="reference">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>

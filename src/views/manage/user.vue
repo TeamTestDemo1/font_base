@@ -4,7 +4,7 @@
     #  这是增删查改系统用户的页面,超级管理员可查看
     <div style="padding: 5px 0">
       <el-input v-model="text" @keyup.enter.native="load" style="width: 200px"> <i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-      <el-button @click="add" size="small" style="margin-left: 10px ;background-color: #ffd04b">新增</el-button>
+      <el-button @click="add" type="primary" size="small" style="margin-left: 10px ;">新增</el-button>
     </div>
     <el-table :data="tableData" border stripe style="width: 100%">
       <el-table-column prop="id" label="ID"></el-table-column>
@@ -30,15 +30,15 @@
       <el-table-column
           fixed="right"
           label="操作"
-          width="200">
+          align="center"
+          width="180">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle @click="edit(scope.row)"></el-button>
+          <el-button type="primary" plain  @click="edit(scope.row)">编辑</el-button>
           <el-popconfirm
               @confirm="del(scope.row.id)"
-              title="确定删除？"
-          >
-            <el-button type="danger" icon="el-icon-delete" circle slot="reference"
-                       style="margin-left: 10px"></el-button>
+              title="确定删除？">
+            <el-button type="danger" plain  slot="reference"
+                       style="margin-left: 10px">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>

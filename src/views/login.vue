@@ -5,7 +5,7 @@
         margin: 50px auto;">
 
         <div style="width: 260px; margin: 0 auto; padding-top: 30px">
-          <div class="item" style="font-size: 30px; color:#ffd04b">登录</div>
+          <div class="item" style="font-size: 33px; color:white;font-family: 微软雅黑;font-weight: bold">登录</div>
           <div class="item">
             <input type="text" class="inputItem" placeholder="请输入用户名" v-model="user.username">
           </div>
@@ -170,7 +170,7 @@ export default {
   background-size: 100% 100vh;
 }
 .is-active {
-  color: #e6a23c;
+  color: #0554a7;
 }
 .item {
   text-align: center;
@@ -178,7 +178,7 @@ export default {
 }
 
 .loginBtn {
-  background: #ffd04b;
+  background: #228af8;
   border-radius: 5px;
   color: white;
   width: 100%;

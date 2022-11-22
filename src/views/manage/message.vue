@@ -5,7 +5,7 @@
     <div style="padding: 20px; color: #888">
       <div>
         <el-input type="textarea" :rows="3" v-model="entity.content"></el-input>
-        <div style="text-align: right; padding: 10px"><el-button  size:large @click="save" icon="el-icon-edit-outline" style="background-color: #ffd04b">留言</el-button></div>
+        <div style="text-align: right; padding: 10px"><el-button  size="small" @click="save" icon="el-icon-edit-outline"  round type="primary">留言</el-button></div>
 
       </div>
     </div>

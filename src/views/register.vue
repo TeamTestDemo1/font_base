@@ -5,7 +5,7 @@
         margin: 50px auto;">
 
         <div style="width: 260px; margin: 0 auto; padding-top: 30px">
-          <div class="item" style="font-size: 20px; color: white">注册</div>
+          <div class="item" style="font-size: 30px; color: white;font-weight: bold">注册</div>
           <div class="item">
             <input type="text" v-model="user.username" style="width: 100%; padding: 10px; border-radius: 5px;" placeholder="请输入用户名">
           </div>
@@ -19,7 +19,7 @@
             <input type="password" v-model="user.confirm"  style="width: 100%; padding: 10px; border-radius: 5px; box-sizing:border-box;"  placeholder="请确认密码">
           </div>
           <div class="item">
-            <button style="background:#ffd04b; border-radius: 5px; color: white; width: 100%; padding: 10px; cursor: pointer" @click="register">注册</button>
+            <button style="background:#228af8; border-radius: 5px; color: white; width: 100%; padding: 10px; cursor: pointer" @click="register">注册</button>
             <div style="padding: 10px 0; text-align: right">
               <span style="cursor: pointer; color:black" @click="goLogin">去登录</span>
             </div>
