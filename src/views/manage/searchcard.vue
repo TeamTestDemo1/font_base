@@ -159,6 +159,7 @@ export default {
   margin-left: 4px;
   width: 318px;
   height: 180px;
+  border-radius: 25px;
 }
 
 .numbertype{

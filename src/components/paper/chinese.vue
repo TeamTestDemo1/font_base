@@ -7,7 +7,7 @@
             <el-input v-model="text" @keyup.enter.native="load" placeholder="请输入搜索内容" style="width: 200px"><i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
             <el-button @click="add" size="small" type="primary" style="margin-left: 10px ">新增</el-button>
-            <el-button  v-show="paper.role[0] === 1" type="primary" style="margin-left: 10px"><i class="el-icon-download"/> 一键核算分数</el-button>
+            <el-button @click="cal_all" v-show="paper.role[0] === 1" type="primary" style="margin-left: 10px"><i class="el-icon-download"/> 一键核算分数</el-button>
           </div>
         </el-col>
         <el-col :span="12">
@@ -25,24 +25,25 @@
         <div style="margin-left: 0px">
           <!--    这是筛选区-->
           <div style="padding: 10px; margin-left: -8px " >
-            <el-select v-model="value1" clearable placeholder="请选择发表时间">
+            <el-select v-model="time" clearable placeholder="请选择发表时间" @change=load>
               <el-option
                   v-for="item in optionstime"
                   :key="item.value"
-                  :label="item.label"
+                  :label="item.value"
                   :value="item.value">
               </el-option>
             </el-select>
             <el-select
-                v-model="value3"
+                v-model="state"
                 clearable
                 collapse-tags
                 style="margin-left: 20px;"
+                @change=load
                 placeholder="筛选审核状态">
               <el-option
                   v-for="item in optionsstate"
                   :key="item.value"
-                  :label="item.label"
+                  :label="item.value"
                   :value="item.value">
               </el-option>
             </el-select>
@@ -60,10 +61,9 @@
                 type="selection"
                 width="55">
             </el-table-column>
-            <el-table-column prop="id" label="序号">
+            <el-table-column prop="teacherName" label="教师姓名">
             </el-table-column>
-            <el-table-column prop="paperId" label="论文编号">
-            </el-table-column>
+        
             <el-table-column prop="paperTitle" label="论文名称">
             </el-table-column>
             <el-table-column prop="authorAll" label="所有作者">
@@ -78,13 +78,13 @@
             </el-table-column>
             <el-table-column prop="journistRank" label="论文类型">
             </el-table-column>
-            <el-table-column prop="paperStatus" label="审核状态" show-overflow-tooltip>
-              <template slot-scope="{row: {paperStatus}}">
-                <span v-if="paperStatus === 1">已审核</span>
-                <span v-else>待审核</span>
-              </template>
+            <el-table-column prop="paperScore" label="论文分数">
             </el-table-column>
-            <el-table-column fixed="right" align="center" label="操作" width="200px">
+
+            <el-table-column prop="paperState" label="审核状态" show-overflow-tooltip>
+            </el-table-column>
+
+            <el-table-column fixed="right" align="center" label="操作" width="200px" >
               <template slot-scope="scope">
 <!--                <el-upload v-show="paper.role[0] === 3" action="http://localhost:9999/files/upload" :on-success="successUploadFiles" :show-file-list="false" style="display: inline-block">-->
 <!--                  <el-button  type="primary"  plain style="margin-left: 10px;margin-right: 0px">上传<i class="el-icon-upload el-icon&#45;&#45;right"></i></el-button>-->
@@ -95,7 +95,7 @@
                     size="mini"
                     plain
                     style="margin-left: 20px"
-                    :disabled="scope.row.chkState === 1 || scope.row.chkState === 2"
+                    :disabled="scope.row.paperState === '已审核'"
                     @click="hChkState(scope.row)">审核</el-button>
                 <el-button  v-if="paper.role[0] === 3" plain type="success" style="margin-left: 10px"   @click="editstate(scope.row)">需求<i class="el-icon-edit"></i></el-button>
                 <el-button  v-if="paper.role[0] === 1"  plain type="success" size="mini" @click="edit(scope.row)">编辑</el-button>
@@ -159,14 +159,11 @@
           <el-dialog title="论文信息" :visible.sync="dialogFormVisible" width="40%"
                      :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
             <el-form :model="entity">
-              <el-form-item label="序号" label-width="120px" v-if="!entity.id">
-                <el-input v-model="entity.id" autocomplete="off" style="width: 80%"></el-input>
-              </el-form-item>
-              <el-form-item label="论文编号" label-width="120px">
-                <el-input v-model="entity.paperId" autocomplete="off" style="width: 80%"></el-input>
+              <el-form-item label="教师姓名" label-width="120px">
+                <el-input v-model="entity.teacherName" autocomplete="off" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item label="论文名称" label-width="120px">
-                <el-input v-model="entity.paperName" autocomplete="off" style="width: 80%"></el-input>
+                <el-input v-model="entity.paperTitle" autocomplete="off" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item label="所有作者" label-width="120px">
                 <el-input v-model="entity.authorAll" autocomplete="off" style="width: 80%"></el-input>
@@ -176,6 +173,9 @@
               </el-form-item>
               <el-form-item label="署名单位" label-width="120px">
                 <el-input v-model="entity.paperUnit" autocomplete="off" style="width: 80%"></el-input>
+              </el-form-item>
+              <el-form-item label="核算分数" label-width="120px">
+                <el-input v-model="entity.paperScore" autocomplete="off" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item label="发行日期" label-width="120px">
                 <el-date-picker
@@ -189,24 +189,14 @@
               <el-form-item label="doi" label-width="120px">
                 <el-input v-model="entity.paperDoi" autocomplete="off" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="论文类型" label-width="120px">
-                <el-input v-model="entity. journistRank" autocomplete="off" style="width: 80%"></el-input>
-              </el-form-item>
+              
               <el-form-item label="审核状态" label-width="120px">
-                <el-input v-model="entity. chkState" autocomplete="off" style="width: 80%"></el-input>
+                <el-input v-model="entity.paperState" autocomplete="off" style="width: 80%"></el-input>
+              </el-form-item>
+              <el-form-item label="论文类型" label-width="120px">
+                <el-input v-model="entity.journistRank" autocomplete="off" style="width: 80%"></el-input>
               </el-form-item>
             </el-form>
-            <div style="margin-left: 115px">
-              <el-upload
-                  class="upload-demo"
-                  drag
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  multiple>
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-              </el-upload>
-            </div>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
               <el-button type="primary" @click="save">确 定</el-button>
@@ -217,14 +207,14 @@
             <el-form>
               <el-form-item>
                 <el-radio-group v-model="ratios">
-                  <el-radio label="通过" @change="changeState">通过</el-radio>
-                  <el-radio label="拒绝" @change="changeState">拒绝</el-radio>
+                  <el-radio label="通过">通过</el-radio>
+                  <el-radio label="拒绝">拒绝</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item>
                 <el-input
                     type="textarea"
-                    v-model="remark"
+                    v-model="advice"
                     :rows="5"
                     style="width:400px"
                     placeholder="请输入审核意见"
@@ -262,16 +252,16 @@
 
 <script>
 import API from '../../utils/request'
-const url = "/api/paper/"
+const url = "/api/paper/chinese"
 
 export default {
   name: "papercheck",
   data() {
     return {
       options: [],
-      value1: [],
-      value2: [],
-      value3: [],
+      advice: "",
+      time: "",
+      state: "",
       tableData: [],
       user: {},
       pageNum: 1,
@@ -290,24 +280,25 @@ export default {
       state1:'',
       paper:{},
       optionstime: [{
-        value: '选项1',
-        label: '2022年'
+        label: '2022年',
+        value: '2022年'
+        
       }, {
-        value: '选项2',
-        label: '2021年'
+        label: '2021年',
+        value: '2021年'
       }, {
-        value: '选项3',
-        label: '2020年'
+        label: '2020年',
+        value: '2020年'
       }, {
-        value: '选项4',
-        label: '2019年'
+        label: '2019年',
+        value: '2019年'
       }],
       optionsstate: [{
-        value: '选项1',
-        label: '待审核'
+       label: '已审核',
+        value: '已审核'
       }, {
-        value: '选项2',
-        label: '已审核'
+        label: '待审核',
+        value: '待审核',
       }],
     };
   },
@@ -319,7 +310,8 @@ export default {
     else{
       this.username=this.paper.name
     }
-    console.log(this.username)
+  },
+  mounted(){
     this.load()
   },
   methods: {
@@ -331,26 +323,28 @@ export default {
       this.pageSize = pageSize
       this.load()
     },
-    handleCurrentChange(pageNum) {
-      this.pageNum = pageNum
-      this.load()
-    },
     load() {
       API.get(url + "/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          name: this.text
+          title: this.text,
+          state: this.state,
+          time: this.time.substr(0, 4)
         }
       }).then(res => {
         this.tableData = res.data.records || []
         this.total = res.data.total
-        console.log(this.tableData)
       })
+    
 
       API.get("/api/role").then(res => {
         this.options = res.data
       })
+    },
+    handleCurrentChange(pageNum) {
+      this.pageNum = pageNum
+      this.load()
     },
     add() {
       this.entity = {}
@@ -358,8 +352,27 @@ export default {
     },
     edit(obj) {
       this.entity = JSON.parse(JSON.stringify(obj))
+      this.entity
       this.dialogFormVisible = true
     },
+    cal_all(){
+      API.get(url + "/score/all").then(res => {
+        if (res.code === '0') {
+            this.$message({
+              type: "success",
+              message: "操作成功"
+            })
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.load()
+      })
+
+    },
+
     save() {
       if (!this.entity.id) {
         API.post(url, this.entity).then(res => {
@@ -378,7 +391,7 @@ export default {
           this.dialogFormVisible = false
         })
       } else {
-        API.put(url, this.entity).then(res => {
+        API.put(url + "/modify", this.entity).then(res => {
           if (res.code === '0') {
             this.$message({
               type: "success",
@@ -395,8 +408,9 @@ export default {
         })
       }
     },
-    del(id) {
-      API.delete(url + id).then(res => {
+    del(row) {
+      var id = row.id
+      API.delete(url + "/" + id).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",
@@ -412,7 +426,7 @@ export default {
       })
     },
     out(){
-      window.open('http://localhost:9999/api/paper//export/chinese')
+      window.open('http://localhost:9999/api/paper/chinese/export')
     },
     changeState(row,state){
 
@@ -429,16 +443,29 @@ export default {
       this.class = row
     },
     hSubmitChkState(){
+      this.class.paperState = this.advice
       console.log(this.class)
       if(this.state1 === '通过'){
         this.class.state = "审核通过"
       }else if(this.state1 === '拒绝'){
         this.class.state = this.remark
       }
-      this.request.post("http://localhost:9999/project",this.class).then(res=>{
-        console.log(res)
-      })
-      this.getData()
+      API.get(url + "/modify/"+ this.class.id + "/" + this.advice ).then(res=>{
+        if (res.code === '0') {
+          this.$message({
+            type: "success",
+            message: "操作成功"
+          })
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.load()
+       
+      })      
+
       this.showChkStateDialog = false
     },
     editstate(row){

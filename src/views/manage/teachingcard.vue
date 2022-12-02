@@ -109,8 +109,10 @@ export default {
 .card{
   width: 405px;
   height: 190px;
-  margin-top: 10px;
+  margin-top: 0px;
+  margin-bottom: 5px;
   margin-left: 15px;
+  border-radius: 10px;
 }
 
 .el-progress{

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <header>
-      <img src="./imagelala.jpg" style="margin-left: -20px; margin-bottom:-25px;width: 68px">
+      <img src="./image1.png" style="margin-left: -20px; margin-bottom:-25px;width: 68px">
       |商学院绩效考核系统
       <el-dropdown style="float: right;" @command="handleCommand">
         <span class="el-dropdown-link" style="cursor: pointer;color: white;font-family: '微软雅黑'">
@@ -110,7 +110,7 @@ header {
   line-height: 65px;
   padding: 0 16px;
   font-size: 24px;
-  font-family: 楷体;
+  font-family: 楷体_GB2312;
   font-weight: bold;
   color: white;
   background-color: #0554a7;

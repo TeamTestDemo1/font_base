@@ -96,6 +96,10 @@ let routes = [
                 component: () => import("../views/manage/super")
             },
             {
+                path: 'card',
+                component: () => import("../views/manage/card")
+            },
+            {
                  path: 'paper',
                  component: () => import("../views/manage/Paper"),
                 children:[
